@@ -1,0 +1,764 @@
+local bool = true
+
+if bool then
+    game.Workspace.FallenPartsDestroyHeight = 0 / 0
+else
+    game.Workspace.FallenPartsDestroyHeight = -600
+end
+
+wait(0.1)
+wait(0.2)
+
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local LocalPlayer = Players.LocalPlayer
+
+-- Variables para el fling
+local SelectedPlayers = {}
+local FlingRunning = false
+local FlingThread = nil
+local MaxPlayers = 30
+
+-- Sistema de Fling
+local OldPos
+local FPDH = workspace.FallenPartsDestroyHeight
+
+local function SkidFling(TargetPlayer)
+    local Character = LocalPlayer.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+    local RootPart = Humanoid and Humanoid.RootPart
+
+    local TCharacter = TargetPlayer.Character
+    local THumanoid
+    local TRootPart
+    local THead
+    local Accessory
+    local Handle
+
+    if TCharacter and TCharacter:FindFirstChildOfClass("Humanoid") then
+        THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+    end
+    if THumanoid and THumanoid.RootPart then
+        TRootPart = THumanoid.RootPart
+    end
+    if TCharacter and TCharacter:FindFirstChild("Head") then
+        THead = TCharacter.Head
+    end
+    if TCharacter and TCharacter:FindFirstChildOfClass("Accessory") then
+        Accessory = TCharacter:FindFirstChildOfClass("Accessory")
+    end
+    if Accessory and Accessory:FindFirstChild("Handle") then
+        Handle = Accessory.Handle
+    end
+
+    if Character and Humanoid and RootPart then
+        if RootPart.Velocity.Magnitude < 50 then
+            OldPos = RootPart.CFrame
+        end
+        
+        if THead then
+            workspace.CurrentCamera.CameraSubject = THead
+        elseif not THead and Handle then
+            workspace.CurrentCamera.CameraSubject = Handle
+        elseif THumanoid and TRootPart then
+            workspace.CurrentCamera.CameraSubject = THumanoid
+        end
+        
+        if TCharacter and not TCharacter:FindFirstChildWhichIsA("BasePart") then
+            return false
+        end
+        
+        local FPos = function(BasePart, Pos, Ang)
+            if RootPart and BasePart then
+                RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+                if Character then
+                    Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+                end
+                RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+                RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+            end
+        end
+        
+        local SFBasePart = function(BasePart)
+            local TimeToWait = 2
+            local Time = tick()
+            local Angle = 0
+
+            repeat
+                if RootPart and THumanoid and BasePart and BasePart.Parent then
+                    if BasePart.Velocity.Magnitude < 50 then
+                        Angle = Angle + 100
+
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                    else
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                        task.wait()
+                    end
+                else
+                    break
+                end
+            until not FlingRunning or not BasePart or not BasePart.Parent or BasePart.Parent ~= TargetPlayer.Character or not TargetPlayer.Parent or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or (THumanoid and THumanoid.Sit) or (Humanoid and Humanoid.Health <= 0) or tick() > Time + TimeToWait
+        end
+        
+        workspace.FallenPartsDestroyHeight = 0/0
+        
+        local BV = Instance.new("BodyVelocity")
+        BV.Name = "EpixVel"
+        BV.Parent = RootPart
+        BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+        BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+        
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+        
+        if TRootPart and THead then
+            if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+                SFBasePart(THead)
+            else
+                SFBasePart(TRootPart)
+            end
+        elseif TRootPart and not THead then
+            SFBasePart(TRootPart)
+        elseif not TRootPart and THead then
+            SFBasePart(THead)
+        elseif not TRootPart and not THead and Accessory and Handle then
+            SFBasePart(Handle)
+        else
+            return false
+        end
+        
+        BV:Destroy()
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+        workspace.CurrentCamera.CameraSubject = Humanoid
+        
+        repeat
+            if RootPart and OldPos then
+                RootPart.CFrame = OldPos * CFrame.new(0, .5, 0)
+                Character:SetPrimaryPartCFrame(OldPos * CFrame.new(0, .5, 0))
+                Humanoid:ChangeState("GettingUp")
+                table.foreach(Character:GetChildren(), function(_, x)
+                    if x:IsA("BasePart") then
+                        x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+                    end
+                end)
+                task.wait()
+            end
+        until not FlingRunning or not RootPart or not OldPos or (RootPart.Position - OldPos.p).Magnitude < 25
+        workspace.FallenPartsDestroyHeight = FPDH
+        return true
+    else
+        return false
+    end
+end
+
+-- GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "PlayerTargetGUI_Square"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Botón principal
+local SquareButton = Instance.new("TextButton")
+SquareButton.Size = UDim2.new(0, 50, 0, 50)
+SquareButton.Position = UDim2.new(0, 20, 0, 20)
+SquareButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+SquareButton.BorderSizePixel = 2
+SquareButton.BorderColor3 = Color3.fromRGB(40, 40, 40)
+SquareButton.Text = "►"
+SquareButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SquareButton.Font = Enum.Font.GothamBold
+SquareButton.TextSize = 20
+SquareButton.Parent = ScreenGui
+
+-- LED negro con efecto
+local ButtonLED = Instance.new("UIStroke")
+ButtonLED.Thickness = 3
+ButtonLED.Color = Color3.fromRGB(20, 20, 20)
+ButtonLED.Transparency = 0.3
+ButtonLED.Parent = SquareButton
+
+-- Animación de parpadeo LED
+local function animateLED()
+    while ButtonLED and ButtonLED.Parent do
+        ButtonLED.Transparency = 0.1
+        wait(0.8)
+        ButtonLED.Transparency = 0.4
+        wait(0.8)
+    end
+end
+spawn(animateLED)
+
+-- Panel principal (inicialmente oculto)
+local MainPanel = Instance.new("Frame")
+MainPanel.Size = UDim2.new(0, 320, 0, 500)
+MainPanel.Position = UDim2.new(0, 80, 0, 20)
+MainPanel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+MainPanel.BorderSizePixel = 2
+MainPanel.BorderColor3 = Color3.fromRGB(40, 40, 40)
+MainPanel.Visible = false
+MainPanel.Parent = ScreenGui
+
+-- Borde LED negro del panel
+local PanelLED = Instance.new("UIStroke")
+PanelLED.Thickness = 2
+PanelLED.Color = Color3.fromRGB(30, 30, 30)
+PanelLED.Transparency = 0.2
+PanelLED.Parent = MainPanel
+
+-- Cabecera del panel
+local Header = Instance.new("Frame")
+Header.Size = UDim2.new(1, 0, 0, 40)
+Header.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Header.BorderSizePixel = 0
+Header.Parent = MainPanel
+
+local HeaderTitle = Instance.new("TextLabel")
+HeaderTitle.Size = UDim2.new(1, -40, 1, 0)
+HeaderTitle.Position = UDim2.new(0, 10, 0, 0)
+HeaderTitle.BackgroundTransparency = 1
+HeaderTitle.Text = "FLING SYSTEM"
+HeaderTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+HeaderTitle.Font = Enum.Font.GothamBold
+HeaderTitle.TextSize = 18
+HeaderTitle.TextXAlignment = Enum.TextXAlignment.Left
+HeaderTitle.Parent = Header
+
+-- Botón para cerrar en el panel
+local CloseButton = Instance.new("TextButton")
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -35, 0.5, -15)
+CloseButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+CloseButton.BorderSizePixel = 0
+CloseButton.Text = "✕"
+CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.TextSize = 16
+CloseButton.Parent = Header
+
+-- Contador de objetivos
+local TargetCount = Instance.new("TextLabel")
+TargetCount.Size = UDim2.new(1, -20, 0, 30)
+TargetCount.Position = UDim2.new(0, 10, 0, 45)
+TargetCount.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+TargetCount.BorderSizePixel = 0
+TargetCount.TextColor3 = Color3.fromRGB(150, 150, 150)
+TargetCount.Font = Enum.Font.GothamBold
+TargetCount.TextSize = 16
+TargetCount.Text = "Targets: 0/30"
+TargetCount.TextXAlignment = Enum.TextXAlignment.Center
+TargetCount.Parent = MainPanel
+
+-- Frame para botones de utilidad
+local UtilityButtonsFrame = Instance.new("Frame")
+UtilityButtonsFrame.Size = UDim2.new(1, -20, 0, 40)
+UtilityButtonsFrame.Position = UDim2.new(0, 10, 0, 80)
+UtilityButtonsFrame.BackgroundTransparency = 1
+UtilityButtonsFrame.Parent = MainPanel
+
+-- Botón "All" (Seleccionar todos)
+local AllButton = Instance.new("TextButton")
+AllButton.Size = UDim2.new(0.48, 0, 1, 0)
+AllButton.Position = UDim2.new(0, 0, 0, 0)
+AllButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+AllButton.BorderSizePixel = 0
+AllButton.Text = "ALL"
+AllButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+AllButton.Font = Enum.Font.GothamBold
+AllButton.TextSize = 14
+AllButton.Parent = UtilityButtonsFrame
+
+-- Botón "Limpiar"
+local ClearButton = Instance.new("TextButton")
+ClearButton.Size = UDim2.new(0.48, 0, 1, 0)
+ClearButton.Position = UDim2.new(0.52, 0, 0, 0)
+ClearButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ClearButton.BorderSizePixel = 0
+ClearButton.Text = "LIMPIAR"
+ClearButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+ClearButton.Font = Enum.Font.GothamBold
+ClearButton.TextSize = 14
+ClearButton.Parent = UtilityButtonsFrame
+
+-- Frame para botones de control
+local ControlButtonsFrame = Instance.new("Frame")
+ControlButtonsFrame.Size = UDim2.new(1, -20, 0, 40)
+ControlButtonsFrame.Position = UDim2.new(0, 10, 0, 125)
+ControlButtonsFrame.BackgroundTransparency = 1
+ControlButtonsFrame.Parent = MainPanel
+
+-- Botón "Iniciar"
+local StartButton = Instance.new("TextButton")
+StartButton.Size = UDim2.new(0.48, 0, 1, 0)
+StartButton.Position = UDim2.new(0, 0, 0, 0)
+StartButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+StartButton.BorderSizePixel = 0
+StartButton.Text = "INICIAR"
+StartButton.TextColor3 = Color3.fromRGB(0, 200, 0)
+StartButton.Font = Enum.Font.GothamBold
+StartButton.TextSize = 14
+StartButton.Parent = ControlButtonsFrame
+
+-- Botón "Parar"
+local StopButton = Instance.new("TextButton")
+StopButton.Size = UDim2.new(0.48, 0, 1, 0)
+StopButton.Position = UDim2.new(0.52, 0, 0, 0)
+StopButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+StopButton.BorderSizePixel = 0
+StopButton.Text = "PARAR"
+StopButton.TextColor3 = Color3.fromRGB(200, 0, 0)
+StopButton.Font = Enum.Font.GothamBold
+StopButton.TextSize = 14
+StopButton.Parent = ControlButtonsFrame
+
+-- Status label
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(1, -20, 0, 20)
+StatusLabel.Position = UDim2.new(0, 10, 0, 170)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+StatusLabel.Font = Enum.Font.GothamSemibold
+StatusLabel.TextSize = 12
+StatusLabel.Text = "Estado: Detenido"
+StatusLabel.TextXAlignment = Enum.TextXAlignment.Center
+StatusLabel.Parent = MainPanel
+
+-- Lista de jugadores
+local PlayerList = Instance.new("ScrollingFrame")
+PlayerList.Size = UDim2.new(1, -20, 1, -195)
+PlayerList.Position = UDim2.new(0, 10, 0, 195)
+PlayerList.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+PlayerList.BorderSizePixel = 0
+PlayerList.ScrollBarThickness = 6
+PlayerList.ScrollBarImageColor3 = Color3.fromRGB(40, 40, 40)
+PlayerList.Parent = MainPanel
+
+local UIListLayout = Instance.new("UIListLayout", PlayerList)
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 5)
+
+-- Función para abrir/cerrar el panel
+local isPanelOpen = false
+
+SquareButton.MouseButton1Click:Connect(function()
+    if isPanelOpen then
+        MainPanel.Visible = false
+        SquareButton.Text = "►"
+        isPanelOpen = false
+    else
+        MainPanel.Visible = true
+        SquareButton.Text = "◄"
+        isPanelOpen = true
+        UpdatePlayerList()
+    end
+end)
+
+CloseButton.MouseButton1Click:Connect(function()
+    MainPanel.Visible = false
+    SquareButton.Text = "►"
+    isPanelOpen = false
+end)
+
+-- Hacer el botón cuadrado arrastrable
+local dragging = false
+local dragStart = nil
+local startPos = nil
+
+SquareButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = SquareButton.Position
+    end
+end)
+
+SquareButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+        local delta = input.Position - dragStart
+        SquareButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        
+        if isPanelOpen then
+            MainPanel.Position = UDim2.new(0, SquareButton.Position.X.Offset + 60, 0, SquareButton.Position.Y.Offset)
+        end
+    end
+end)
+
+-- Función para buscar jugador en lista
+local function FindPlayerInTable(tbl, player)
+    if not player then return nil end
+    for i = 1, #tbl do
+        if tbl[i] == player then return i end
+    end
+    return nil
+end
+
+-- Función para actualizar la interfaz
+local function UpdatePlayerList()
+    local allPlayers = {}
+    for _, p in ipairs(Players:GetPlayers()) do
+        allPlayers[p.UserId] = p
+    end
+    
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            local uid = p.UserId
+            local playerFrame = PlayerList:FindFirstChild("PlayerFrame_" .. uid)
+            
+            if not playerFrame then
+                -- Crear nuevo frame para el jugador
+                local F = Instance.new("Frame")
+                F.Name = "PlayerFrame_" .. uid
+                F.Size = UDim2.new(1, 0, 0, 60)
+                F.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                F.BorderSizePixel = 0
+                F.Parent = PlayerList
+
+                local H = Instance.new("ImageLabel")
+                H.Size = UDim2.new(0, 40, 0, 40)
+                H.Position = UDim2.new(0, 5, 0.5, -20)
+                H.BackgroundTransparency = 1
+                H.Parent = F
+
+                local L = Instance.new("TextLabel")
+                L.Size = UDim2.new(1, -100, 0.5, -2)
+                L.Position = UDim2.new(0, 50, 0, 5)
+                L.TextColor3 = Color3.fromRGB(200, 200, 200)
+                L.BackgroundTransparency = 1
+                L.TextXAlignment = Enum.TextXAlignment.Left
+                L.Font = Enum.Font.GothamSemibold
+                L.TextSize = 14
+                L.TextTruncate = Enum.TextTruncate.AtEnd
+                L.Text = p.DisplayName .. " (" .. p.Name .. ")"
+                L.Parent = F
+                
+                local InfoLabel = Instance.new("TextLabel")
+                InfoLabel.Size = UDim2.new(1, -100, 0.5, -2)
+                InfoLabel.Position = UDim2.new(0, 50, 0.5, 0)
+                InfoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                InfoLabel.BackgroundTransparency = 1
+                InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
+                InfoLabel.Font = Enum.Font.Gotham
+                InfoLabel.TextSize = 12
+                InfoLabel.Text = "Click para seleccionar"
+                InfoLabel.Parent = F
+
+                local B = Instance.new("TextButton")
+                B.Size = UDim2.new(1, 0, 1, 0)
+                B.BackgroundTransparency = 1
+                B.Text = ""
+                B.Parent = F
+
+                -- Configurar evento de clic
+                local capturedPlayer = p
+                B.MouseButton1Click:Connect(function()
+                    local isSelected = FindPlayerInTable(SelectedPlayers, capturedPlayer)
+                    
+                    if isSelected then
+                        -- Deseleccionar
+                        table.remove(SelectedPlayers, isSelected)
+                        F.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                        InfoLabel.Text = "No seleccionado"
+                        InfoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                    else
+                        -- Verificar límite
+                        if #SelectedPlayers >= MaxPlayers then
+                            StarterGui:SetCore("SendNotification", {
+                                Title = "Límite alcanzado",
+                                Text = "Máximo " .. MaxPlayers .. " jugadores",
+                                Duration = 2,
+                                Icon = "rbxassetid://4456176229"
+                            })
+                            return
+                        end
+
+                     -- Seleccionar
+                        table.insert(SelectedPlayers, capturedPlayer)
+                        F.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                        InfoLabel.Text = "SELECCIONADO ✓"
+                        InfoLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+                    end
+                    
+                    TargetCount.Text = "Targets: " .. #SelectedPlayers .. "/" .. MaxPlayers
+                    StarterGui:SetCore("SendNotification", {
+                        Title = "Selección actualizada",
+                        Text = "Objetivos: " .. #SelectedPlayers,
+                        Duration = 1,
+                        Icon = "rbxassetid://4456176229"
+                    })
+                end)
+            end
+            
+            -- Actualizar imagen
+            local frame = PlayerList:FindFirstChild("PlayerFrame_" .. uid)
+            if frame then
+                local headshot = frame:FindFirstChildOfClass("ImageLabel")
+                if headshot then
+                    headshot.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. uid .. "&width=420&height=420&format=png"
+                end
+                
+                -- Actualizar estado de selección
+                local isSelected = FindPlayerInTable(SelectedPlayers, p)
+                local infoLabel = frame:FindFirstChildOfClass("TextLabel", true)
+                if infoLabel and infoLabel.Parent ~= frame then
+                    for _, child in ipairs(frame:GetChildren()) do
+                        if child:IsA("TextLabel") and child.Position.Y.Scale > 0.4 then
+                            infoLabel = child
+                            break
+                        end
+                    end
+                end
+                
+                if isSelected then
+                    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                    if infoLabel then
+                        infoLabel.Text = "SELECCIONADO ✓"
+                        infoLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+                    end
+                else
+                    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                    if infoLabel then
+                        infoLabel.Text = "Click para seleccionar"
+                        infoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                    end
+                end
+            end
+        end
+    end
+    
+    -- Eliminar jugadores que ya no están
+    for _, child in ipairs(PlayerList:GetChildren()) do
+        if child:IsA("Frame") and child.Name:sub(1, 12) == "PlayerFrame_" then
+            local uid = tonumber(child.Name:sub(13))
+            if not allPlayers[uid] then
+                -- Remover de la lista de seleccionados
+                for i = #SelectedPlayers, 1, -1 do
+                    if SelectedPlayers[i] and SelectedPlayers[i].UserId == uid then
+                        table.remove(SelectedPlayers, i)
+                    end
+                end
+                child:Destroy()
+            end
+        end
+    end
+    
+    -- Actualizar contador
+    TargetCount.Text = "Targets: " .. #SelectedPlayers .. "/" .. MaxPlayers
+    if PlayerList then
+        PlayerList.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
+    end
+end
+
+-- Botón ALL (seleccionar todos)
+AllButton.MouseButton1Click:Connect(function()
+    SelectedPlayers = {}
+    
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and #SelectedPlayers < MaxPlayers then
+            table.insert(SelectedPlayers, p)
+        end
+    end
+    
+    UpdatePlayerList()
+    
+    StarterGui:SetCore("SendNotification", {
+        Title = "Todos seleccionados",
+        Text = "Objetivos: " .. #SelectedPlayers,
+        Duration = 2,
+        Icon = "rbxassetid://4456176229"
+    })
+end)
+
+-- Botón LIMPIAR
+ClearButton.MouseButton1Click:Connect(function()
+    SelectedPlayers = {}
+    UpdatePlayerList()
+    
+    StarterGui:SetCore("SendNotification", {
+        Title = "Objetivos limpiados",
+        Text = "Selección reiniciada",
+        Duration = 2,
+        Icon = "rbxassetid://4456176229"
+    })
+end)
+
+-- Función principal del loop de fling
+local function FlingLoop()
+    while FlingRunning and #SelectedPlayers > 0 do
+        for i, targetPlayer in ipairs(SelectedPlayers) do
+            if not FlingRunning then break end
+            
+            -- Verificar que el jugador aún existe
+            if targetPlayer and targetPlayer.Parent and targetPlayer.Character then
+                StatusLabel.Text = "Flingeando: " .. targetPlayer.Name
+                StatusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+                
+                -- Realizar el fling
+                local success = pcall(function()
+                    SkidFling(targetPlayer)
+                end)
+                
+                if not success then
+                    StatusLabel.Text = "Error con: " .. targetPlayer.Name
+                    StatusLabel.TextColor3 = Color3.fromRGB(200, 0, 0)
+                end
+                
+                -- Pequeña pausa entre jugadores
+                if FlingRunning and i < #SelectedPlayers then
+                    wait(0.1)
+                end
+            else
+                -- Remover jugador si ya no está disponible
+                table.remove(SelectedPlayers, i)
+                UpdatePlayerList()
+            end
+        end
+        
+        if FlingRunning and #SelectedPlayers > 0 then
+            StatusLabel.Text = "Ciclo completado. Repitiendo..."
+            StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 0)
+            wait(0.5)
+        end
+    end
+    
+    if not FlingRunning then
+        StatusLabel.Text = "Estado: Detenido"
+        StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    end
+end
+
+-- Botón INICIAR
+StartButton.MouseButton1Click:Connect(function()
+    if #SelectedPlayers == 0 then
+        StarterGui:SetCore("SendNotification", {
+            Title = "Error",
+            Text = "Selecciona al menos un jugador",
+            Duration = 2,
+            Icon = "rbxassetid://4456176229"
+        })
+        return
+    end
+    
+    if not FlingRunning then
+        FlingRunning = true
+        StatusLabel.Text = "Fling activado"
+        StatusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+        StartButton.BackgroundColor3 = Color3.fromRGB(0, 50, 0)
+        StopButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
+        
+        -- Iniciar el loop de fling en un hilo separado
+        FlingThread = coroutine.create(FlingLoop)
+        coroutine.resume(FlingThread)
+        
+        StarterGui:SetCore("SendNotification", {
+            Title = "Fling iniciado",
+            Text = "Objetivos: " .. #SelectedPlayers,
+            Duration = 2,
+            Icon = "rbxassetid://4456176229"
+        })
+    end
+end)
+
+-- Botón PARAR
+StopButton.MouseButton1Click:Connect(function()
+    if FlingRunning then
+        FlingRunning = false
+        StatusLabel.Text = "Fling detenido"
+        StatusLabel.TextColor3 = Color3.fromRGB(200, 0, 0)
+        StartButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        StopButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        
+        StarterGui:SetCore("SendNotification", {
+            Title = "Fling detenido",
+            Text = "Sistema pausado",
+            Duration = 2,
+            Icon = "rbxassetid://4456176229"
+        })
+    end
+end)
+
+-- Actualizar lista periódicamente
+Players.PlayerAdded:Connect(function()
+    if isPanelOpen then
+        UpdatePlayerList()
+    end
+end)
+
+Players.PlayerRemoving:Connect(function()
+    if isPanelOpen then
+        UpdatePlayerList()
+    end
+end)
+
+-- Loop para mantener actualizada la lista
+spawn(function()
+    while true do
+        wait(3)
+        if isPanelOpen then
+            UpdatePlayerList()
+        end
+    end
+end)
+
+-- Asegurar visibilidad en móviles
+if game:GetService("UserInputService").TouchEnabled then
+    SquareButton.Size = UDim2.new(0, 60, 0, 60)
+    SquareButton.TextSize = 24
+    MainPanel.Size = UDim2.new(0, 350, 0, 550)
+end
+
+-- Notificación inicial
+if not Welcome then 
+    StarterGui:SetCore("SendNotification", {
+        Title = "Sistema de Fling",
+        Text = "GUI cargada correctamente",
+        Duration = 3
+    }) 
+end
+getgenv().Welcome = true
