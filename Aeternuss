@@ -258,7 +258,7 @@ local HeaderTitle = Instance.new("TextLabel")
 HeaderTitle.Size = UDim2.new(1, -40, 1, 0)
 HeaderTitle.Position = UDim2.new(0, 10, 0, 0)
 HeaderTitle.BackgroundTransparency = 1
-HeaderTitle.Text = "FLING SYSTEM"
+HeaderTitle.Text = "FLINGEA PENDEJOS"
 HeaderTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
 HeaderTitle.Font = Enum.Font.GothamBold
 HeaderTitle.TextSize = 18
@@ -466,31 +466,52 @@ local function UpdatePlayerList()
                 H.BackgroundTransparency = 1
                 H.Parent = F
 
-                local L = Instance.new("TextLabel")
-                L.Size = UDim2.new(1, -100, 0.5, -2)
-                L.Position = UDim2.new(0, 50, 0, 5)
-                L.TextColor3 = Color3.fromRGB(200, 200, 200)
-                L.BackgroundTransparency = 1
-                L.TextXAlignment = Enum.TextXAlignment.Left
-                L.Font = Enum.Font.GothamSemibold
-                L.TextSize = 14
-                L.TextTruncate = Enum.TextTruncate.AtEnd
-                L.Text = p.DisplayName .. " (" .. p.Name .. ")"
-                L.Parent = F
+                -- Username arriba
+                local UsernameLabel = Instance.new("TextLabel")
+                UsernameLabel.Name = "Username"
+                UsernameLabel.Size = UDim2.new(1, -90, 0.4, -2)
+                UsernameLabel.Position = UDim2.new(0, 50, 0, 5)
+                UsernameLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+                UsernameLabel.BackgroundTransparency = 1
+                UsernameLabel.TextXAlignment = Enum.TextXAlignment.Left
+                UsernameLabel.Font = Enum.Font.GothamBold
+                UsernameLabel.TextSize = 14
+                UsernameLabel.TextTruncate = Enum.TextTruncate.AtEnd
+                UsernameLabel.Text = "@" .. p.Name
+                UsernameLabel.Parent = F
                 
-                local InfoLabel = Instance.new("TextLabel")
-                InfoLabel.Size = UDim2.new(1, -100, 0.5, -2)
-                InfoLabel.Position = UDim2.new(0, 50, 0.5, 0)
-                InfoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-                InfoLabel.BackgroundTransparency = 1
-                InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
-                InfoLabel.Font = Enum.Font.Gotham
-                InfoLabel.TextSize = 12
-                InfoLabel.Text = "Click para seleccionar"
-                InfoLabel.Parent = F
+                -- Display Name abajo
+                local DisplayLabel = Instance.new("TextLabel")
+                DisplayLabel.Name = "DisplayName"
+                DisplayLabel.Size = UDim2.new(1, -90, 0.4, -2)
+                DisplayLabel.Position = UDim2.new(0, 50, 0.4, 0)
+                DisplayLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                DisplayLabel.BackgroundTransparency = 1
+                DisplayLabel.TextXAlignment = Enum.TextXAlignment.Left
+                DisplayLabel.Font = Enum.Font.Gotham
+                DisplayLabel.TextSize = 12
+                DisplayLabel.Text = p.DisplayName
+                DisplayLabel.TextTruncate = Enum.TextTruncate.AtEnd
+                DisplayLabel.Parent = F
+
+                -- Botón de selección (inicialmente rojo)
+                local SelectButton = Instance.new("TextButton")
+                SelectButton.Name = "SelectButton"
+                SelectButton.Size = UDim2.new(0, 30, 0, 30)
+                SelectButton.Position = UDim2.new(1, -40, 0.5, -15)
+                SelectButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)  -- Rojo por defecto
+                SelectButton.BorderSizePixel = 0
+                SelectButton.Text = ""
+                SelectButton.Parent = F
+
+                -- Borde del botón
+                local SelectButtonBorder = Instance.new("UIStroke")
+                SelectButtonBorder.Thickness = 2
+                SelectButtonBorder.Color = Color3.fromRGB(80, 80, 80)
+                SelectButtonBorder.Parent = SelectButton
 
                 local B = Instance.new("TextButton")
-                B.Size = UDim2.new(1, 0, 1, 0)
+                B.Size = UDim2.new(1, -40, 1, 0)
                 B.BackgroundTransparency = 1
                 B.Text = ""
                 B.Parent = F
@@ -504,8 +525,14 @@ local function UpdatePlayerList()
                         -- Deseleccionar
                         table.remove(SelectedPlayers, isSelected)
                         F.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                        InfoLabel.Text = "No seleccionado"
-                        InfoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                        SelectButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)  -- Rojo
+                        
+                        StarterGui:SetCore("SendNotification", {
+                            Title = "Deseleccionado",
+                            Text = capturedPlayer.Name,
+                            Duration = 1,
+                            Icon = "rbxassetid://4456176229"
+                        })
                     else
                         -- Verificar límite
                         if #SelectedPlayers >= MaxPlayers then
@@ -517,55 +544,56 @@ local function UpdatePlayerList()
                             })
                             return
                         end
-
-                     -- Seleccionar
+                        
+                        -- Seleccionar
                         table.insert(SelectedPlayers, capturedPlayer)
                         F.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                        InfoLabel.Text = "SELECCIONADO ✓"
-                        InfoLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+                        SelectButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)  -- Verde
+                        
+                        StarterGui:SetCore("SendNotification", {
+                            Title = "Seleccionado ✓",
+                            Text = capturedPlayer.Name,
+                            Duration = 1,
+                            Icon = "rbxassetid://4456176229"
+                        })
                     end
                     
                     TargetCount.Text = "Targets: " .. #SelectedPlayers .. "/" .. MaxPlayers
-                    StarterGui:SetCore("SendNotification", {
-                        Title = "Selección actualizada",
-                        Text = "Objetivos: " .. #SelectedPlayers,
-                        Duration = 1,
-                        Icon = "rbxassetid://4456176229"
-                    })
                 end)
             end
             
-            -- Actualizar imagen
+            -- Actualizar imagen y estado
             local frame = PlayerList:FindFirstChild("PlayerFrame_" .. uid)
             if frame then
+                -- Actualizar imagen
                 local headshot = frame:FindFirstChildOfClass("ImageLabel")
                 if headshot then
                     headshot.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. uid .. "&width=420&height=420&format=png"
                 end
                 
+                -- Actualizar labels
+                local usernameLabel = frame:FindFirstChild("Username")
+                local displayLabel = frame:FindFirstChild("DisplayName")
+                if usernameLabel then
+                    usernameLabel.Text = "@" .. p.Name
+                end
+                if displayLabel then
+                    displayLabel.Text = p.DisplayName
+                end
+                
                 -- Actualizar estado de selección
                 local isSelected = FindPlayerInTable(SelectedPlayers, p)
-                local infoLabel = frame:FindFirstChildOfClass("TextLabel", true)
-                if infoLabel and infoLabel.Parent ~= frame then
-                    for _, child in ipairs(frame:GetChildren()) do
-                        if child:IsA("TextLabel") and child.Position.Y.Scale > 0.4 then
-                            infoLabel = child
-                            break
-                        end
-                    end
-                end
+                local selectButton = frame:FindFirstChild("SelectButton")
                 
                 if isSelected then
                     frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                    if infoLabel then
-                        infoLabel.Text = "SELECCIONADO ✓"
-                        infoLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+                    if selectButton then
+                        selectButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)  -- Verde
                     end
                 else
                     frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                    if infoLabel then
-                        infoLabel.Text = "Click para seleccionar"
-                        infoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                    if selectButton then
+                        selectButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)  -- Rojo
                     end
                 end
             end
@@ -753,12 +781,5 @@ if game:GetService("UserInputService").TouchEnabled then
     MainPanel.Size = UDim2.new(0, 350, 0, 550)
 end
 
--- Notificación inicial
-if not Welcome then 
-    StarterGui:SetCore("SendNotification", {
-        Title = "Sistema de Fling",
-        Text = "GUI cargada correctamente",
-        Duration = 3
-    }) 
-end
+-- Variable global para controlar si ya se mostró el mensaje
 getgenv().Welcome = true
