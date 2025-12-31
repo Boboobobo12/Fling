@@ -199,15 +199,15 @@ ScreenGui.Name = "PlayerTargetGUI_Square"
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Botón principal
+-- Botón principal - NEGRO TOTAL
 local SquareButton = Instance.new("TextButton")
 SquareButton.Size = UDim2.new(0, 50, 0, 50)
 SquareButton.Position = UDim2.new(0, 20, 0, 20)
 SquareButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 SquareButton.BorderSizePixel = 2
-SquareButton.BorderColor3 = Color3.fromRGB(40, 40, 40)
+SquareButton.BorderColor3 = Color3.fromRGB(0, 0, 0)  -- Borde negro
 SquareButton.Text = "►"
-SquareButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SquareButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto blanco
 SquareButton.Font = Enum.Font.GothamBold
 SquareButton.TextSize = 20
 SquareButton.Parent = ScreenGui
@@ -215,7 +215,7 @@ SquareButton.Parent = ScreenGui
 -- LED negro con efecto
 local ButtonLED = Instance.new("UIStroke")
 ButtonLED.Thickness = 3
-ButtonLED.Color = Color3.fromRGB(20, 20, 20)
+ButtonLED.Color = Color3.fromRGB(0, 0, 0)  -- Negro total
 ButtonLED.Transparency = 0.3
 ButtonLED.Parent = SquareButton
 
@@ -230,27 +230,27 @@ local function animateLED()
 end
 spawn(animateLED)
 
--- Panel principal (inicialmente oculto)
+-- Panel principal (inicialmente oculto) - NEGRO TOTAL
 local MainPanel = Instance.new("Frame")
 MainPanel.Size = UDim2.new(0, 320, 0, 500)
 MainPanel.Position = UDim2.new(0, 80, 0, 20)
-MainPanel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+MainPanel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- Negro total
 MainPanel.BorderSizePixel = 2
-MainPanel.BorderColor3 = Color3.fromRGB(40, 40, 40)
+MainPanel.BorderColor3 = Color3.fromRGB(0, 0, 0)  -- Borde negro
 MainPanel.Visible = false
 MainPanel.Parent = ScreenGui
 
 -- Borde LED negro del panel
 local PanelLED = Instance.new("UIStroke")
 PanelLED.Thickness = 2
-PanelLED.Color = Color3.fromRGB(30, 30, 30)
+PanelLED.Color = Color3.fromRGB(0, 0, 0)  -- Negro total
 PanelLED.Transparency = 0.2
 PanelLED.Parent = MainPanel
 
--- Cabecera del panel
+-- Cabecera del panel - NEGRO OSCURO
 local Header = Instance.new("Frame")
 Header.Size = UDim2.new(1, 0, 0, 40)
-Header.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Header.BackgroundColor3 = Color3.fromRGB(5, 5, 5)  -- Negro muy oscuro
 Header.BorderSizePixel = 0
 Header.Parent = MainPanel
 
@@ -259,31 +259,31 @@ HeaderTitle.Size = UDim2.new(1, -40, 1, 0)
 HeaderTitle.Position = UDim2.new(0, 10, 0, 0)
 HeaderTitle.BackgroundTransparency = 1
 HeaderTitle.Text = "FLINGEA PENDEJOS"
-HeaderTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+HeaderTitle.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Texto blanco brillante
 HeaderTitle.Font = Enum.Font.GothamBold
 HeaderTitle.TextSize = 18
 HeaderTitle.TextXAlignment = Enum.TextXAlignment.Left
 HeaderTitle.Parent = Header
 
--- Botón para cerrar en el panel
+-- Botón para cerrar en el panel - NEGRO
 local CloseButton = Instance.new("TextButton")
 CloseButton.Size = UDim2.new(0, 30, 0, 30)
 CloseButton.Position = UDim2.new(1, -35, 0.5, -15)
-CloseButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+CloseButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- Negro
 CloseButton.BorderSizePixel = 0
 CloseButton.Text = "✕"
-CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Blanco
 CloseButton.Font = Enum.Font.GothamBold
 CloseButton.TextSize = 16
 CloseButton.Parent = Header
 
--- Contador de objetivos
+-- Contador de objetivos - NEGRO
 local TargetCount = Instance.new("TextLabel")
 TargetCount.Size = UDim2.new(1, -20, 0, 30)
 TargetCount.Position = UDim2.new(0, 10, 0, 45)
-TargetCount.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+TargetCount.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
 TargetCount.BorderSizePixel = 0
-TargetCount.TextColor3 = Color3.fromRGB(150, 150, 150)
+TargetCount.TextColor3 = Color3.fromRGB(200, 200, 200)  -- Gris claro
 TargetCount.Font = Enum.Font.GothamBold
 TargetCount.TextSize = 16
 TargetCount.Text = "Targets: 0/30"
@@ -297,26 +297,26 @@ UtilityButtonsFrame.Position = UDim2.new(0, 10, 0, 80)
 UtilityButtonsFrame.BackgroundTransparency = 1
 UtilityButtonsFrame.Parent = MainPanel
 
--- Botón "All" (Seleccionar todos)
+-- Botón "All" (Seleccionar todos) - NEGRO
 local AllButton = Instance.new("TextButton")
 AllButton.Size = UDim2.new(0.48, 0, 1, 0)
 AllButton.Position = UDim2.new(0, 0, 0, 0)
-AllButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+AllButton.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
 AllButton.BorderSizePixel = 0
 AllButton.Text = "ALL"
-AllButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+AllButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Blanco
 AllButton.Font = Enum.Font.GothamBold
 AllButton.TextSize = 14
 AllButton.Parent = UtilityButtonsFrame
 
--- Botón "Limpiar"
+-- Botón "Limpiar" - NEGRO
 local ClearButton = Instance.new("TextButton")
 ClearButton.Size = UDim2.new(0.48, 0, 1, 0)
 ClearButton.Position = UDim2.new(0.52, 0, 0, 0)
-ClearButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ClearButton.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
 ClearButton.BorderSizePixel = 0
 ClearButton.Text = "LIMPIAR"
-ClearButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+ClearButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Blanco
 ClearButton.Font = Enum.Font.GothamBold
 ClearButton.TextSize = 14
 ClearButton.Parent = UtilityButtonsFrame
@@ -328,26 +328,26 @@ ControlButtonsFrame.Position = UDim2.new(0, 10, 0, 125)
 ControlButtonsFrame.BackgroundTransparency = 1
 ControlButtonsFrame.Parent = MainPanel
 
--- Botón "Iniciar"
+-- Botón "Iniciar" - NEGRO CON TEXTO VERDE
 local StartButton = Instance.new("TextButton")
 StartButton.Size = UDim2.new(0.48, 0, 1, 0)
 StartButton.Position = UDim2.new(0, 0, 0, 0)
-StartButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+StartButton.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
 StartButton.BorderSizePixel = 0
 StartButton.Text = "INICIAR"
-StartButton.TextColor3 = Color3.fromRGB(0, 200, 0)
+StartButton.TextColor3 = Color3.fromRGB(0, 255, 0)  -- Verde brillante
 StartButton.Font = Enum.Font.GothamBold
 StartButton.TextSize = 14
 StartButton.Parent = ControlButtonsFrame
 
--- Botón "Parar"
+-- Botón "Parar" - NEGRO CON TEXTO ROJO
 local StopButton = Instance.new("TextButton")
 StopButton.Size = UDim2.new(0.48, 0, 1, 0)
 StopButton.Position = UDim2.new(0.52, 0, 0, 0)
-StopButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+StopButton.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
 StopButton.BorderSizePixel = 0
 StopButton.Text = "PARAR"
-StopButton.TextColor3 = Color3.fromRGB(200, 0, 0)
+StopButton.TextColor3 = Color3.fromRGB(255, 0, 0)  -- Rojo brillante
 StopButton.Font = Enum.Font.GothamBold
 StopButton.TextSize = 14
 StopButton.Parent = ControlButtonsFrame
@@ -357,21 +357,21 @@ local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, -20, 0, 20)
 StatusLabel.Position = UDim2.new(0, 10, 0, 170)
 StatusLabel.BackgroundTransparency = 1
-StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)  -- Gris claro
 StatusLabel.Font = Enum.Font.GothamSemibold
 StatusLabel.TextSize = 12
 StatusLabel.Text = "Estado: Detenido"
 StatusLabel.TextXAlignment = Enum.TextXAlignment.Center
 StatusLabel.Parent = MainPanel
 
--- Lista de jugadores
+-- Lista de jugadores - NEGRO
 local PlayerList = Instance.new("ScrollingFrame")
 PlayerList.Size = UDim2.new(1, -20, 1, -195)
 PlayerList.Position = UDim2.new(0, 10, 0, 195)
-PlayerList.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+PlayerList.BackgroundColor3 = Color3.fromRGB(5, 5, 5)  -- Negro muy oscuro
 PlayerList.BorderSizePixel = 0
 PlayerList.ScrollBarThickness = 6
-PlayerList.ScrollBarImageColor3 = Color3.fromRGB(40, 40, 40)
+PlayerList.ScrollBarImageColor3 = Color3.fromRGB(20, 20, 20)  -- Barra negra
 PlayerList.Parent = MainPanel
 
 local UIListLayout = Instance.new("UIListLayout", PlayerList)
@@ -452,11 +452,11 @@ local function UpdatePlayerList()
             local playerFrame = PlayerList:FindFirstChild("PlayerFrame_" .. uid)
             
             if not playerFrame then
-                -- Crear nuevo frame para el jugador
+                -- Crear nuevo frame para el jugador - NEGRO
                 local F = Instance.new("Frame")
                 F.Name = "PlayerFrame_" .. uid
                 F.Size = UDim2.new(1, 0, 0, 60)
-                F.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                F.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
                 F.BorderSizePixel = 0
                 F.Parent = PlayerList
 
@@ -466,12 +466,12 @@ local function UpdatePlayerList()
                 H.BackgroundTransparency = 1
                 H.Parent = F
 
-                -- Username arriba
+                -- Username arriba - TEXTO BLANCO
                 local UsernameLabel = Instance.new("TextLabel")
                 UsernameLabel.Name = "Username"
                 UsernameLabel.Size = UDim2.new(1, -90, 0.4, -2)
                 UsernameLabel.Position = UDim2.new(0, 50, 0, 5)
-                UsernameLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+                UsernameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Blanco
                 UsernameLabel.BackgroundTransparency = 1
                 UsernameLabel.TextXAlignment = Enum.TextXAlignment.Left
                 UsernameLabel.Font = Enum.Font.GothamBold
@@ -480,12 +480,12 @@ local function UpdatePlayerList()
                 UsernameLabel.Text = "@" .. p.Name
                 UsernameLabel.Parent = F
                 
-                -- Display Name abajo
+                -- Display Name abajo - TEXTO GRIS CLARO
                 local DisplayLabel = Instance.new("TextLabel")
                 DisplayLabel.Name = "DisplayName"
                 DisplayLabel.Size = UDim2.new(1, -90, 0.4, -2)
                 DisplayLabel.Position = UDim2.new(0, 50, 0.4, 0)
-                DisplayLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+                DisplayLabel.TextColor3 = Color3.fromRGB(180, 180, 180)  -- Gris claro
                 DisplayLabel.BackgroundTransparency = 1
                 DisplayLabel.TextXAlignment = Enum.TextXAlignment.Left
                 DisplayLabel.Font = Enum.Font.Gotham
@@ -494,20 +494,21 @@ local function UpdatePlayerList()
                 DisplayLabel.TextTruncate = Enum.TextTruncate.AtEnd
                 DisplayLabel.Parent = F
 
-                -- Botón de selección (inicialmente rojo)
+                -- Botón de selección (inicialmente rojo) - FONDO NEGRO
                 local SelectButton = Instance.new("TextButton")
                 SelectButton.Name = "SelectButton"
                 SelectButton.Size = UDim2.new(0, 30, 0, 30)
                 SelectButton.Position = UDim2.new(1, -40, 0.5, -15)
-                SelectButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)  -- Rojo por defecto
+                SelectButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- Negro (borde rojo será el UIStroke)
                 SelectButton.BorderSizePixel = 0
                 SelectButton.Text = ""
                 SelectButton.Parent = F
 
-                -- Borde del botón
+                 -- Borde del botón - ROJO PARA NO SELECCIONADO
                 local SelectButtonBorder = Instance.new("UIStroke")
+                SelectButtonBorder.Name = "Border"
                 SelectButtonBorder.Thickness = 2
-                SelectButtonBorder.Color = Color3.fromRGB(80, 80, 80)
+                SelectButtonBorder.Color = Color3.fromRGB(255, 0, 0)  -- Rojo cuando no seleccionado
                 SelectButtonBorder.Parent = SelectButton
 
                 local B = Instance.new("TextButton")
@@ -524,8 +525,11 @@ local function UpdatePlayerList()
                     if isSelected then
                         -- Deseleccionar
                         table.remove(SelectedPlayers, isSelected)
-                        F.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                        SelectButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)  -- Rojo
+                        F.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
+                        local border = SelectButton:FindFirstChild("Border")
+                        if border then
+                            border.Color = Color3.fromRGB(255, 0, 0)  -- Rojo
+                        end
                         
                         StarterGui:SetCore("SendNotification", {
                             Title = "Deseleccionado",
@@ -547,8 +551,11 @@ local function UpdatePlayerList()
                         
                         -- Seleccionar
                         table.insert(SelectedPlayers, capturedPlayer)
-                        F.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                        SelectButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)  -- Verde
+                        F.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  -- Gris muy oscuro
+                        local border = SelectButton:FindFirstChild("Border")
+                        if border then
+                            border.Color = Color3.fromRGB(0, 255, 0)  -- Verde
+                        end
                         
                         StarterGui:SetCore("SendNotification", {
                             Title = "Seleccionado ✓",
@@ -586,14 +593,16 @@ local function UpdatePlayerList()
                 local selectButton = frame:FindFirstChild("SelectButton")
                 
                 if isSelected then
-                    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                    if selectButton then
-                        selectButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)  -- Verde
+                    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  -- Gris muy oscuro
+                    local border = selectButton and selectButton:FindFirstChild("Border")
+                    if border then
+                        border.Color = Color3.fromRGB(0, 255, 0)  -- Verde
                     end
                 else
-                    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                    if selectButton then
-                        selectButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)  -- Rojo
+                    frame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro oscuro
+                    local border = selectButton and selectButton:FindFirstChild("Border")
+                    if border then
+                        border.Color = Color3.fromRGB(255, 0, 0)  -- Rojo
                     end
                 end
             end
@@ -665,7 +674,7 @@ local function FlingLoop()
             -- Verificar que el jugador aún existe
             if targetPlayer and targetPlayer.Parent and targetPlayer.Character then
                 StatusLabel.Text = "Flingeando: " .. targetPlayer.Name
-                StatusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+                StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)  -- Verde brillante
                 
                 -- Realizar el fling
                 local success = pcall(function()
@@ -674,7 +683,7 @@ local function FlingLoop()
                 
                 if not success then
                     StatusLabel.Text = "Error con: " .. targetPlayer.Name
-                    StatusLabel.TextColor3 = Color3.fromRGB(200, 0, 0)
+                    StatusLabel.TextColor3 = Color3.fromRGB(255, 0, 0)  -- Rojo brillante
                 end
                 
                 -- Pequeña pausa entre jugadores
@@ -690,14 +699,14 @@ local function FlingLoop()
         
         if FlingRunning and #SelectedPlayers > 0 then
             StatusLabel.Text = "Ciclo completado. Repitiendo..."
-            StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 0)
+            StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 0)  -- Amarillo
             wait(0.5)
         end
     end
     
     if not FlingRunning then
         StatusLabel.Text = "Estado: Detenido"
-        StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+        StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)  -- Gris claro
     end
 end
 
@@ -716,9 +725,9 @@ StartButton.MouseButton1Click:Connect(function()
     if not FlingRunning then
         FlingRunning = true
         StatusLabel.Text = "Fling activado"
-        StatusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
-        StartButton.BackgroundColor3 = Color3.fromRGB(0, 50, 0)
-        StopButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
+        StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)  -- Verde brillante
+        StartButton.BackgroundColor3 = Color3.fromRGB(0, 20, 0)  -- Verde muy oscuro
+        StopButton.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro
         
         -- Iniciar el loop de fling en un hilo separado
         FlingThread = coroutine.create(FlingLoop)
@@ -738,9 +747,9 @@ StopButton.MouseButton1Click:Connect(function()
     if FlingRunning then
         FlingRunning = false
         StatusLabel.Text = "Fling detenido"
-        StatusLabel.TextColor3 = Color3.fromRGB(200, 0, 0)
-        StartButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        StopButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 0, 0)  -- Rojo brillante
+        StartButton.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Negro
+        StopButton.BackgroundColor3 = Color3.fromRGB(20, 0, 0)  -- Rojo muy oscuro
         
         StarterGui:SetCore("SendNotification", {
             Title = "Fling detenido",
